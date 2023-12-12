@@ -4,9 +4,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 public class EmployeePayrollData {
-    private int id;
-    private String name;
-    private long salary;
+   int id;
+   String name;
+    long salary;
+    EmployeePayrollData(){
+        id=0;
+        name="";
+        salary=0;
+
+    }
+    EmployeePayrollData(int id,String name,long salary){
+        this.id=id;
+        this.name=name;
+        this.salary=salary;
+    }
     public int getId() {
         return id;
     }
@@ -25,19 +36,5 @@ public class EmployeePayrollData {
     public void setSalary(long salary) {
         this.salary = salary;
     }
-    public void readFromConsole() throws IOException {
-        BufferedReader reader=new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Enter the Employee ID: ");
-        id=Integer.parseInt(reader.readLine());
-        System.out.println("Enter the Employee Name");
-        name=reader.readLine();
-        System.out.println("Enter the Employee Salary:");
-        salary= Long.parseLong(reader.readLine());
-    }
-    public void writeToConsole() throws IOException{
-        System.out.println("Employee id:"+id);
-        System.out.println("Employee name:"+name);
-        System.out.println("Employee salary:"+salary);
-        System.out.println();
-    }
+
 }

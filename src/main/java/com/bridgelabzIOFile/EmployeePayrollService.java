@@ -1,16 +1,98 @@
 package com.bridgelabzIOFile;
 
-import java.io.IOException;
+import java.io.*;
 
 public class EmployeePayrollService {
-    public void  run() throws IOException {
-        System.out.println("Employee payroll service");
-        EmployeePayrollData emp = new EmployeePayrollData();
-        emp.readFromConsole();
-        System.out.println("Employee Details:");
-        System.out.println(emp.getId());
-        System.out.println(emp.getName());
-        System.out.println(emp.getSalary());
-        emp.writeToConsole();
+    //read the file
+    public static EmployeePayrollData readFromConsole() throws IOException {
+        BufferedReader reader=new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter the Employee ID: ");
+        int id=Integer.parseInt(reader.readLine());
+        System.out.println("Enter the Employee Name");
+        String name=reader.readLine();
+        System.out.println("Enter the Employee Salary:");
+        long salary= Long.parseLong(reader.readLine());
+        //create an employeePayroll object
+        EmployeePayrollData emp=new EmployeePayrollData(id,name,salary);
+        return emp;
     }
+    //write the file
+    public static void write_employeeToFile(EmployeePayrollData employeePayrollData,String filepath){
+        try{
+            FileWriter writer=new FileWriter(filepath);
+            writer.write("ID"+employeePayrollData.id+"\n");
+            writer.write("Name"+employeePayrollData.name+"\n");
+            writer.write("Salary"+employeePayrollData.salary+"\n");
+            writer.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //check if file exist
+    public static boolean checkfileExist(String filename){
+        File file=new File(filename);
+        return file.exists();
+    }
+    //delete file and check if file does not exist
+    public static boolean deteleFile(String filename){
+        File file=new File(filename);
+        if(file.exists()){
+            return  file.delete() && !file.exists();
+        }
+        return false;
+    }
+    //create directory
+    public static boolean createDirectory(String path){
+        File directory=new File(path);
+        return directory.mkdir();
+    }
+    //create empty file
+    public static boolean createEmptyFile(String filepath){
+        File file=new File(filepath);
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void listFilesAndDirectories(String path,String extension){
+        File directory=new File(path);
+        File[] files=directory.listFiles();
+        if(files!=null){
+            for(File file:files){
+                if(file.isDirectory()){
+                    System.out.println("Drectory:"+file.getName());
+                }
+                else {
+                    System.out.println("File:"+file.getName());
+                    if(file.getName().endsWith(extension)){
+                        System.out.println("zfile with extension"+extension+" "+file.getName());
+                    }
+                }
+            }
+
+        }
+
+    }
+    public static void main(String[] args) throws IOException {
+      EmployeePayrollData employee=EmployeePayrollService.readFromConsole();
+      //write employee details to a file
+        String filepath="E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee.txt";
+        write_employeeToFile(employee,filepath);
+        //check if file exists
+        System.out.println("File exist:"+checkfileExist(filepath));
+        //delete file and check if file does not exist
+        System.out.println("File deleted:"+deteleFile(filepath));
+        //create directory
+        String path="E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee_dir";
+        System.out.println("Directory created: "+createDirectory(path));
+        //create empty file
+        System.out.println("File created:"+createEmptyFile("empty_file.txt"));
+        // List files, directories, and files with a specific extension
+        listFilesAndDirectories(".",".txt");
+
+
+    }
+
 }
