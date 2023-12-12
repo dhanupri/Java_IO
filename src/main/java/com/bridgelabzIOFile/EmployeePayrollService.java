@@ -72,6 +72,22 @@ public class EmployeePayrollService {
 
         }
     }
+    public static void printData(){
+        try {
+            Files.lines(new File("E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee.txt").toPath()).forEach(System.out::println);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static long countEntries() throws IOException {
+        long entries=0;
+        try {
+            entries = Files.lines(Paths.get("E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee.txt")).count();
+        } finally {
+            return entries;
+        }
+
+    }
     public static void watchDirectory(String directory) throws IOException {
         try{
             Path path=Paths.get(directory);
@@ -119,7 +135,8 @@ public class EmployeePayrollService {
         // List files, directories, and files with a specific extension
         listFilesAndDirectories(".", ".txt");
         watchDirectory.processEvents();
-
+        printData();
+        countEntries();
 
     }
 
