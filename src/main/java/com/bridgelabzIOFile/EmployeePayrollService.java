@@ -6,6 +6,7 @@ public class EmployeePayrollService {
     //read the file
     public static void readFromConsole() throws IOException {
         BufferedReader reader=new BufferedReader(new InputStreamReader(System.in));
+        FileWriter writer=new FileWriter("E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee.txt");
         for (int i=0;i<4;i++) {
             System.out.println("Enter the Employee ID: ");
             int id = Integer.parseInt(reader.readLine());
@@ -15,20 +16,16 @@ public class EmployeePayrollService {
             long salary = Long.parseLong(reader.readLine());
             //create an employeePayroll object
             EmployeePayrollData emp = new EmployeePayrollData(id, name, salary);
-            write_employeeToFile(emp, "E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee.txt");
+            write_employeeToFile(emp,writer);
 
         }
+        writer.close();
     }
     //write the file
-    public static void write_employeeToFile(EmployeePayrollData employeePayrollData,String filepath){
-        try(FileWriter writer=new FileWriter(filepath)){
-            writer.write("ID     : "+employeePayrollData.getId()+"\n");
-            writer.write("Name   : "+employeePayrollData.getName()+"\n");
+    public static void write_employeeToFile(EmployeePayrollData employeePayrollData,FileWriter writer) throws IOException {
+            writer.write("ID     : "+employeePayrollData.getId()+"\t");
+            writer.write("Name   : "+employeePayrollData.getName()+"\t");
             writer.write("Salary : "+employeePayrollData.getSalary()+"\n");
-
-        } catch (IOException e) {
-            System.err.println("Error creating the file: " + e.getMessage());
-        }
     }
     //check if file exist
     public static boolean checkfileExist(String filename){
