@@ -4,8 +4,11 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+
 import static java.nio.file.StandardWatchEventKinds.*;
 public class WatchDirectory {
+    Scanner sc=new Scanner(System.in);
     public final WatchService watcher;
     public final Map<WatchKey,Path> dirWatchers;
     //create new Watch service and Directory
@@ -33,12 +36,15 @@ public class WatchDirectory {
     //process all the event
     @SuppressWarnings({"rawtypes","unchecked"})
     public void processEvents(){
+        long count=1;
         while (true){
             WatchKey key;
             try {
                 key=watcher.take();
+                count++;
             }
             catch (InterruptedException x){
+                System.out.println("count : "+count);
                 return;
             }
             Path dir=dirWatchers.get(key);
@@ -59,6 +65,12 @@ public class WatchDirectory {
                     }
                 } else if (kind.equals(ENTRY_DELETE)) {
                     if (Files.isDirectory(child)) dirWatchers.remove(key);
+                }
+                System.out.println("Keep watching yes/no");
+
+                if(sc.nextLine().toLowerCase().equals("no")){
+                    System.out.println("count : "+ count);
+                    break;
                 }
             }
             //reset key if dir is removed

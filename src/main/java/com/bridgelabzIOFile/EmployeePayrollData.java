@@ -11,7 +11,6 @@ public class EmployeePayrollData {
         id=0;
         name="";
         salary=0;
-
     }
     EmployeePayrollData(int id,String name,long salary){
         this.id=id;
@@ -36,5 +35,4 @@ public class EmployeePayrollData {
     public void setSalary(long salary) {
         this.salary = salary;
     }
-
 }
