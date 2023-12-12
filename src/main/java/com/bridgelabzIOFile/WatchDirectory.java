@@ -66,12 +66,12 @@ public class WatchDirectory {
                 } else if (kind.equals(ENTRY_DELETE)) {
                     if (Files.isDirectory(child)) dirWatchers.remove(key);
                 }
-                System.out.println("Keep watching yes/no");
+            }
+            System.out.println("Keep watching yes/no");
+            if(sc.nextLine().toLowerCase().equals("no")){
+                System.out.println("count : "+ count);
 
-                if(sc.nextLine().toLowerCase().equals("no")){
-                    System.out.println("count : "+ count);
-                    break;
-                }
+                break;
             }
             //reset key if dir is removed
             boolean valid=key.reset();
