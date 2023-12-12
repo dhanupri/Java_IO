@@ -1,4 +1,0 @@
-ID     : 1	Name   : a	Salary : 111
-ID     : 2	Name   : a	Salary : 222
-ID     : 3	Name   : rr	Salary : 333
-ID     : 4	Name   : f	Salary : 222

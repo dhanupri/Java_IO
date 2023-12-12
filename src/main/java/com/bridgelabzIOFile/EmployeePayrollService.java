@@ -137,6 +137,12 @@ public class EmployeePayrollService {
         watchDirectory.processEvents();
         printData();
         countEntries();
+        try (BufferedReader input=new BufferedReader(new FileReader("E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee.txt"))){
+            String line ;
+            while ((line=input.readLine())!=null){
+                String[] arr=line.split(" ");
+            }
+        }
 
     }
 
