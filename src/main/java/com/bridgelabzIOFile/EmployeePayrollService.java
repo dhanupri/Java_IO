@@ -1,6 +1,6 @@
 package com.bridgelabzIOFile;
-
 import java.io.*;
+import java.nio.file.*;
 
 public class EmployeePayrollService {
     //read the file
@@ -67,31 +67,60 @@ public class EmployeePayrollService {
                 else {
                     System.out.println("File:"+file.getName());
                     if(file.getName().endsWith(extension)){
-                        System.out.println("zfile with extension"+extension+" "+file.getName());
+                        System.out.println("file with extension"+extension+" "+file.getName());
                     }
                 }
             }
 
         }
-
+    }
+    public static void watchDirectory(String directory) throws IOException {
+        try{
+            Path path=Paths.get(directory);
+            WatchService watchService=FileSystems.getDefault().newWatchService();
+            path.register(watchService,StandardWatchEventKinds.ENTRY_CREATE,StandardWatchEventKinds.ENTRY_DELETE,StandardWatchEventKinds.ENTRY_MODIFY);
+            System.out.println("Watching directory:"+directory);
+            while (true){
+                WatchKey key=watchService.take();
+                for (WatchEvent<?> event:key.pollEvents()){
+                    System.out.println("Event kind:"+event.kind()+", File affected:"+event.context());
+                }
+                boolean reset=key.reset();
+                if(!reset ){
+                    break;
+                }
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void countEntries(String filename){
+        try {
+            Path path=Paths.get(filename);
+            long linecount=Files.lines(path).count();
+            System.out.println("Number of entries in file:"+linecount);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     public static void main(String[] args) throws IOException {
-      EmployeePayrollData employee=EmployeePayrollService.readFromConsole();
-      //write employee details to a file
-        String filepath="E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee.txt";
-        write_employeeToFile(employee,filepath);
+        EmployeePayrollData employee = EmployeePayrollService.readFromConsole();
+        WatchDirectory watchDirectory=new WatchDirectory(Paths.get("E:\\IOStreamProject\\src\\main\\java"));
+        //write employee details to a file
+        String filepath = "E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee.txt";
+        write_employeeToFile(employee, filepath);
         //check if file exists
-        System.out.println("File exist:"+checkfileExist(filepath));
+        System.out.println("File exist:" + checkfileExist(filepath));
         //delete file and check if file does not exist
-        System.out.println("File deleted:"+deteleFile(filepath));
+        System.out.println("File deleted:" + deteleFile(filepath));
         //create directory
-        String path="E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee_dir";
-        System.out.println("Directory created: "+createDirectory(path));
+        String path = "E:\\IOStreamProject\\src\\main\\java\\com\\bridgelabzIOFile\\employee_dir";
+        System.out.println("Directory created: " + createDirectory(path));
         //create empty file
-        System.out.println("File created:"+createEmptyFile("empty_file.txt"));
+        System.out.println("File created:" + createEmptyFile("empty_file.txt"));
         // List files, directories, and files with a specific extension
-        listFilesAndDirectories(".",".txt");
-
+        listFilesAndDirectories(".", ".txt");
+        watchDirectory.processEvents();
 
     }
 
